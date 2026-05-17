@@ -1,2 +1,2 @@
-CREATE DATABASE IF NOT EXISTS ticketing;
-USE ticketing;
+CREATE DATABASE IF NOT EXISTS ticketing_db;
+USE ticketing_db;

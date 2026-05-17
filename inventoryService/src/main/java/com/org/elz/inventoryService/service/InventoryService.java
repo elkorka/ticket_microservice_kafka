@@ -7,11 +7,13 @@ import com.org.elz.inventoryService.entity.Venue;
 import com.org.elz.inventoryService.response.EventInventoryResponse;
 import com.org.elz.inventoryService.response.VenueInventoryResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InventoryService {
@@ -50,5 +52,13 @@ public class InventoryService {
                 .ticketPrice(event.getTicketPrice())
                 .eventId(event.getId())
                 .build();
+    }
+
+    public void updateEventCapacity(final Long eventId, final Long ticketsBooked){
+        final Event event = eventRepository.findById(eventId).orElse(null);
+        event.setLeftCapacity(event.getLeftCapacity() - ticketsBooked);
+        eventRepository.saveAndFlush(event);
+        log.info("updating event capacity of event:id {} with tickets booked: {}",eventId,ticketsBooked);
+
     }
 }

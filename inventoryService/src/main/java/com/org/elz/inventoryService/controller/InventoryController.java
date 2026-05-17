@@ -4,6 +4,7 @@ import com.org.elz.inventoryService.response.EventInventoryResponse;
 import com.org.elz.inventoryService.response.VenueInventoryResponse;
 import com.org.elz.inventoryService.service.InventoryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,5 +29,12 @@ public class InventoryController {
     @GetMapping("/inventory/event/{eventId")
     public @ResponseBody EventInventoryResponse inventoryForEvent(@PathVariable("eventId") Long eventId){
         return inventoryService.getEventInventory(eventId);
+    }
+
+    @PutMapping("/inventory/event/{eventId}/capacity/{capacity}")
+    public ResponseEntity<Void> updateEventCapacity(@PathVariable("eventId") Long eventId,
+                                                    @PathVariable("capacity") Long ticketsBooked){
+        inventoryService.updateEventCapacity(eventId, ticketsBooked);
+        return ResponseEntity.ok().build();
     }
 }
