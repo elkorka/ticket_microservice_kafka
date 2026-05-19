@@ -61,10 +61,35 @@ services:
     environment:
       SCHEMA_REGISTRY_HOST_NAME: kafka-schema-registry
 
+  keyckloak-db:
+    container_name: keycloack-mysql
+    image: mysql:8.3.0
+    volumes:
+      - ./volume-data/mysql_keycloak-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloak
+      MYSQL_PASSWORD: password
 
-
-
-
+  keyckloak:
+    container_name: keycloack
+    image: quay.io/keycloak/keycloak:24.0.1
+    command: ["start-dev", "--import-realm" ]
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: MYSQL
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8091:8080"
+    volumes:
+      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
+    depends_on:
+      - keycloak-db
 
 volumes:
   db-data:
